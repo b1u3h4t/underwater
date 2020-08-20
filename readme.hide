@@ -1,9 +1,0 @@
-
-
-# ssh: root@95.217.193.89 -p 29720
-# password:  1HawUY8GoOMe
-# Connect tp SSH 
-
-#How to Connect via ssh POSTGRES
-# ***** 
-# ssh -v -L 5432:postgres:5432 root@95.217.193.89 -p 29720
