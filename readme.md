@@ -1,6 +1,6 @@
 ### UNDERWATER
 
-## Scan Compound finances and het Underwater Account For liquidation
+## Scan Compound.finances and get Underwater Accounts For liquidation
 
 ```
     yarn install or npm install
