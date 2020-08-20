@@ -4,13 +4,24 @@ const config = {
   serviceName: process.env.SERVICENAME || "UNDERWATER",
   port: Number(process.env.PORT) || 3000,
   loggerLevel: "debug",
+
   db: {
-    user: process.env.DB_USER || "",
-    database: process.env.DB || "",
-    password: process.env.DB_PASS || "",
-    host: process.env.DB_HOST || "",
-    port: Number(process.env.DB_PORT) || 5432,
-    max: Number(process.env.DB_MAX_CLIENTS) || 20,
+    host: process.env.PGHOST || "",
+    user: process.env.PGUSER || "",
+    database: process.env.PGDATABASE || "",
+    password: process.env.PGPASSWORD || "",
+    port: Number(process.env.PGPORT) || 5432,
+    max: Number(process.env.PG_MAX_CLIENT) || 20,
+    idleTimeoutMillis: Number(process.env.DB_IDLE_TIMEOUT_MS) || 30000,
+  },
+
+  db_local: {
+    host: process.env.PGHOST_LOCAL || "",
+    user: process.env.PGUSER_LOCAL || "",
+    database: process.env.PGDATABASE_LOCAL || "",
+    password: process.env.PGPASSWORD_LOCAL || "",
+    port: Number(process.env.PGPORT_LOCAL) || 5432,
+    max: Number(process.env.PG_MAX_CLIENT) || 20,
     idleTimeoutMillis: Number(process.env.DB_IDLE_TIMEOUT_MS) || 30000,
   },
 };

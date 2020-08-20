@@ -2,7 +2,7 @@ import { Client, Pool, QueryResult } from "pg";
 import config = require("../config");
 import logger = require("./logger");
 
-const pgconfig = {
+export const pgconfig = {
   user: config.db.user,
   database: config.db.database,
   password: config.db.password,
@@ -12,12 +12,27 @@ const pgconfig = {
   idleTimeoutMillis: config.db.idleTimeoutMillis,
 };
 
+export const pgconfig_local = {
+  user: config.db_local.user,
+  database: config.db_local.database,
+  password: config.db_local.password,
+  host: config.db_local.host,
+  port: config.db_local.port,
+  max: config.db_local.max,
+  idleTimeoutMillis: config.db_local.idleTimeoutMillis,
+};
+
 const pool = new Pool(pgconfig);
+const pool_local = new Pool(pgconfig_local);
 
 logger.info(`DB Connection Settings: ${JSON.stringify(pgconfig)}`);
 
 pool.on("error", function (err: Error) {
-  logger.error(`idle client error, ${err.message} | ${err.stack}`);
+  logger.error(`idle Pool client error, ${err.message} | ${err.stack}`);
+});
+
+pool_local.on("error", function (err: Error) {
+  logger.error(`Pool Local  client error, ${err.message} | ${err.stack}`);
 });
 
 /*
@@ -26,11 +41,20 @@ pool.on("error", function (err: Error) {
  * @param data: the data to be stored
  * @return result
  */
-export const sqlToDB = async (sql: string, data: string[][]) => {
+export const sqlToDB = async (
+  sql: string,
+  data: string[][],
+  local: boolean = false
+) => {
   logger.debug(`sqlToDB() sql: ${sql} | data: ${data}`);
   let result: QueryResult;
   try {
-    result = await pool.query(sql, data);
+    if (local) {
+      result = await pool_local.query(sql, data);
+    } else {
+      result = await pool.query(sql, data);
+    }
+
     return result;
   } catch (error) {
     throw new Error(error.message);

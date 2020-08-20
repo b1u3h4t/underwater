@@ -1,6 +1,7 @@
 import { comptroller, web3 } from "./contracts";
 import { legos } from "@studydefi/money-legos";
 import { BigNumber } from "bignumber.js";
+import * from "./types";
 
 interface AssetInfo {
   address: string;
