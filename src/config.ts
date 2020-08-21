@@ -24,6 +24,8 @@ const config = {
     max: Number(process.env.PG_MAX_CLIENT) || 20,
     idleTimeoutMillis: Number(process.env.DB_IDLE_TIMEOUT_MS) || 30000,
   },
+
+  rpcAddress: process.env.RPC_HTTP,
 };
 
 export = config;
