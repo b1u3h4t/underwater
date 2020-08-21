@@ -6,7 +6,7 @@ import { AccountLiquidity } from "./types";
 export async function getAccountLiquidity(
   borrower: string
 ): Promise<AccountLiquidity> {
-  let accountLiquidity: AccountLiquidity; // ?
+  let accountLiquidity: AccountLiquidity; //
   let response = await comptroller.methods.getAccountLiquidity(borrower).call();
   let { "0": Error, "1": liquidity, "2": shortfall } = response;
 

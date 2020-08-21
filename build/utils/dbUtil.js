@@ -1,13 +1,15 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.commit = exports.rollback = exports.sqlExecMultipleRows = exports.sqlExecSingleRow = exports.getTransaction = exports.sqlToDB = exports.pgconfig_local = exports.pgconfig = void 0;
 const pg_1 = require("pg");
 const config = require("../config");
 const logger = require("./logger");
@@ -44,7 +46,7 @@ pool_local.on("error", function (err) {
  * @param data: the data to be stored
  * @return result
  */
-exports.sqlToDB = (sql, data, local = false) => __awaiter(this, void 0, void 0, function* () {
+exports.sqlToDB = (sql, data, local = false) => __awaiter(void 0, void 0, void 0, function* () {
     logger.debug(`sqlToDB() sql: ${sql} | data: ${data}`);
     let result;
     try {
@@ -64,7 +66,7 @@ exports.sqlToDB = (sql, data, local = false) => __awaiter(this, void 0, void 0, 
  * Retrieve a SQL client with transaction from connection pool. If the client is valid, either
  * COMMMIT or ROALLBACK needs to be called at the end before releasing the connection back to pool.
  */
-exports.getTransaction = () => __awaiter(this, void 0, void 0, function* () {
+exports.getTransaction = () => __awaiter(void 0, void 0, void 0, function* () {
     logger.debug(`getTransaction()`);
     const client = yield pool.connect();
     try {
@@ -81,7 +83,7 @@ exports.getTransaction = () => __awaiter(this, void 0, void 0, function* () {
  * @param data: the data to be stored
  * @return result
  */
-exports.sqlExecSingleRow = (client, sql, data) => __awaiter(this, void 0, void 0, function* () {
+exports.sqlExecSingleRow = (client, sql, data) => __awaiter(void 0, void 0, void 0, function* () {
     logger.debug(`sqlExecSingleRow() sql: ${sql} | data: ${data}`);
     let result;
     try {
@@ -100,7 +102,7 @@ exports.sqlExecSingleRow = (client, sql, data) => __awaiter(this, void 0, void 0
  * @param data: the data to be stored
  * @return result
  */
-exports.sqlExecMultipleRows = (client, sql, data) => __awaiter(this, void 0, void 0, function* () {
+exports.sqlExecMultipleRows = (client, sql, data) => __awaiter(void 0, void 0, void 0, function* () {
     logger.debug(`inside sqlExecMultipleRows()`);
     logger.debug(`sqlExecMultipleRows() data: ${data}`);
     if (data.length !== 0) {
@@ -124,7 +126,7 @@ exports.sqlExecMultipleRows = (client, sql, data) => __awaiter(this, void 0, voi
 /*
  * Rollback transaction
  */
-exports.rollback = (client) => __awaiter(this, void 0, void 0, function* () {
+exports.rollback = (client) => __awaiter(void 0, void 0, void 0, function* () {
     if (typeof client !== "undefined" && client) {
         try {
             logger.info(`sql transaction rollback`);
@@ -144,7 +146,7 @@ exports.rollback = (client) => __awaiter(this, void 0, void 0, function* () {
 /*
  * Commit transaction
  */
-exports.commit = (client) => __awaiter(this, void 0, void 0, function* () {
+exports.commit = (client) => __awaiter(void 0, void 0, void 0, function* () {
     logger.debug(`sql transaction committed`);
     try {
         yield client.query("COMMIT");

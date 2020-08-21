@@ -9,11 +9,12 @@ export interface AccountLiquidity {
 }
 
 export interface AssetInfo {
-  address: string;
+  account: string;
+  asset: string;
   symbol: string;
   name: string;
-  cTokenBalance: string; // To Do Change To Bignumber Type
-  borrowBalanceStored: string; // To Do Change To Bignumber Type
+  cTokenBalance: number; // To Do Change To Bignumber Type
+  borrowBalanceStored: number; // To Do Change To Bignumber Type
 }
 
 export interface AccountAssets extends Array<AssetInfo> {}
@@ -25,7 +26,19 @@ export interface DbAccount {
 export type Underlying = {
   underLyingAddress: string;
   underLyingSymbol: string;
-  undelyingPrice?: number;
+  underlyingDecimals: number;
+  exchangeRateStored: number;
+  cTokenPrice: number;
+  collateralFactor: number;
+  undelyingPrice: number;
 };
 
 export type cTokens = Record<string, Underlying>; // key is cTonen address
+
+export interface AssetInfoWithBalances extends AssetInfo {
+  cTokenBalanceConverted: number;
+  borrowBalanceStoredConverted: number;
+}
+
+export interface AccountAssetsWithBalances
+  extends Array<AssetInfoWithBalances> {}

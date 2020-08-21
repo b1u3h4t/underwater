@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.priceOracle = exports.comptroller = exports.web3 = void 0;
 const Web3_1 = __importDefault(require("Web3"));
 const money_legos_1 = require("@studydefi/money-legos");
 const abi_1 = require("./data/abi");

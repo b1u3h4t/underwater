@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.accountInfo = void 0;
 exports.accountInfo = [
     {
         address: "0x6C8c6b02E7b2BE14d4fA6022Dfd6d75921D90E4E",

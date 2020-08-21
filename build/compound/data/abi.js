@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.priceOracleAbi = void 0;
 exports.priceOracleAbi = [
     {
         inputs: [
