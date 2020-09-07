@@ -9,7 +9,7 @@ const transactionSuccess: string = "transaction success";
 
 export const getBorrowers = async () => {
   let sql =
-    "select distinct encode(borrower , 'hex') as account  from sgd3.borrow_event limit 100;";
+    "select distinct encode(borrower , 'hex') as account  from sgd3.borrow_event;";
   let data: string[][] = [];
   let result: QueryResult;
 

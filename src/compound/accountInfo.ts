@@ -12,7 +12,7 @@ export async function getAccountInfo(account: string): Promise<AccountAssets> {
   for (let i = 0; i < assets.length; i++) {
     // @ts-ignore: Unreachable code error
     const cToken = new web3.eth.Contract(legos.compound.cToken.abi, assets[i]);
-    const asset: string = assets[i];
+    const asset: string = assets[i].toLowerCase();
     const symbol: string = await cToken.methods.symbol().call();
     const name: string = await cToken.methods.name().call();
     const cTokenBalance: number = new BigNumber(
@@ -23,7 +23,7 @@ export async function getAccountInfo(account: string): Promise<AccountAssets> {
     ).toNumber();
 
     let assetInfo: AssetInfo = {
-      account: account,
+      account: "0x" + account.toLowerCase(),
       asset: asset,
       symbol: symbol,
       name: name,

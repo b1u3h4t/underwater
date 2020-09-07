@@ -38,7 +38,15 @@ export type cTokens = Record<string, Underlying>; // key is cTonen address
 export interface AssetInfoWithBalances extends AssetInfo {
   cTokenBalanceConverted: number;
   borrowBalanceStoredConverted: number;
+  cTokenBalanceUsd: number;
+  borrowBalanceUsd: number;
 }
 
 export interface AccountAssetsWithBalances
   extends Array<AssetInfoWithBalances> {}
+
+export interface AccountAssetsAggregated {
+  totalBorrowUSD: number;
+  totalCollateralUSD: number;
+  assetDetails: AccountAssetsWithBalances;
+}

@@ -35,7 +35,7 @@ const transactionSuccess = "transaction success";
  * Get Accounts Borrowed
  */
 exports.getBorrowers = () => __awaiter(void 0, void 0, void 0, function* () {
-    let sql = "select distinct encode(borrower , 'hex') as account  from sgd3.borrow_event limit 100;";
+    let sql = "select distinct encode(borrower , 'hex') as account  from sgd3.borrow_event;";
     let data = [];
     let result;
     try {

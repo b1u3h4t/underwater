@@ -42,13 +42,13 @@ function getAccountInfo(account) {
         for (let i = 0; i < assets.length; i++) {
             // @ts-ignore: Unreachable code error
             const cToken = new contracts_1.web3.eth.Contract(money_legos_1.legos.compound.cToken.abi, assets[i]);
-            const asset = assets[i];
+            const asset = assets[i].toLowerCase();
             const symbol = yield cToken.methods.symbol().call();
             const name = yield cToken.methods.name().call();
             const cTokenBalance = new bignumber_js_1.BigNumber(yield cToken.methods.balanceOf(account).call()).toNumber();
             const borrowBalanceStored = new bignumber_js_1.BigNumber(yield cToken.methods.borrowBalanceStored(account).call()).toNumber();
             let assetInfo = {
-                account: account,
+                account: "0x" + account.toLowerCase(),
                 asset: asset,
                 symbol: symbol,
                 name: name,

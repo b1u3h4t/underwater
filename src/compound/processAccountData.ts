@@ -4,6 +4,7 @@ import {
   AssetInfo,
   AssetInfoWithBalances,
   AccountAssetsWithBalances,
+  AccountAssetsAggregated,
 } from "./types";
 import BigNumber from "bignumber.js";
 import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from "constants";
@@ -15,24 +16,56 @@ import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from "constants";
 export function processAccountData(
   accountAssets: AccountAssets,
   marketData: cTokens
-): AccountAssetsWithBalances {
-  console.log("Process Account Calculate Balances ...");
+): AccountAssetsAggregated {
+  //console.log("Process Account Calculate Balances ...");
+
   let accountAssetsWithBalances: AccountAssetsWithBalances = [];
+  let accountAssetsAggregated: AccountAssetsAggregated = {
+    totalBorrowUSD: 0,
+    totalCollateralUSD: 0,
+    assetDetails: accountAssetsWithBalances,
+  };
+
   for (let item of accountAssets) {
     const market = marketData[item.asset.toLowerCase()];
+    const borrowBalanceStoredConverted: number = new BigNumber(
+      item.borrowBalanceStored
+    )
+      .div(10 ** market.underlyingDecimals)
+      .toNumber();
+    const cTokenBalanceConverted: number = new BigNumber(item.cTokenBalance)
+      .times(market.cTokenPrice)
+      .div(10 ** 8)
+      .toNumber();
 
-    let mergedData: AssetInfoWithBalances = {
+    let assetData: AssetInfoWithBalances = {
       ...item,
-      cTokenBalanceConverted: new BigNumber(item.cTokenBalance)
-        .times(market.cTokenPrice)
-        .div(10 ** 8)
-        .toNumber(),
-      borrowBalanceStoredConverted: new BigNumber(item.borrowBalanceStored)
-        .div(10 ** market.underlyingDecimals)
-        .toNumber(),
+      cTokenBalanceConverted: cTokenBalanceConverted,
+      borrowBalanceStoredConverted: borrowBalanceStoredConverted,
+      cTokenBalanceUsd: cTokenBalanceConverted * market.undelyingPrice,
+      borrowBalanceUsd: borrowBalanceStoredConverted * market.undelyingPrice,
     };
-    accountAssetsWithBalances.push(mergedData);
+    accountAssetsWithBalances.push(assetData);
   }
 
-  return accountAssetsWithBalances;
+  accountAssetsAggregated.assetDetails = accountAssetsWithBalances;
+
+  const totalBorrowUSD = accountAssetsWithBalances.reduce(
+    (acc: number, asset: AssetInfoWithBalances) => {
+      return acc + asset.borrowBalanceUsd;
+    },
+    0
+  );
+
+  const totalCollateralUSD = accountAssetsWithBalances.reduce(
+    (acc: number, asset: AssetInfoWithBalances) => {
+      return acc + asset.cTokenBalanceUsd;
+    },
+    0
+  );
+
+  accountAssetsAggregated.totalBorrowUSD = totalBorrowUSD;
+  accountAssetsAggregated.totalCollateralUSD = totalCollateralUSD;
+
+  return accountAssetsAggregated;
 }

@@ -10,6 +10,10 @@ export const web3 = new Web3(
 
 console.log("Web3 version : ", web3.version);
 
+export const blokNumber = async (): Promise<any> => {
+  return await web3.eth.getBlockNumber();
+};
+
 export const comptroller = new web3.eth.Contract(
   // @ts-ignore: Unreachable code error
   legos.compound.comptroller.abi,
